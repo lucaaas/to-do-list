@@ -9,5 +9,5 @@ assignees: ''
 
 ### Critérios de aceitação
 
--[]
--[]
+- [ ] 
+- [ ]
