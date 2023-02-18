@@ -1,0 +1,1 @@
+export type JSONType = Map<string, any>;
