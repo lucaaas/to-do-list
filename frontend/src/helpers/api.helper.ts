@@ -2,7 +2,7 @@ import type { BaseModel } from '../models/base.model';
 import type { JSONType } from '../types/JSON.type';
 
 export abstract class ApiHelper {
-  protected readonly url: string = 'localhost:3000';
+  protected readonly url: string = 'http://127.0.0.1:3000';
 
   /**
    * Get all resources of the specified path
@@ -20,12 +20,15 @@ export abstract class ApiHelper {
     return models;
   }
 
-  public async post(data: JSONType) {
-    const response: Response = await fetch(this.buildUrl(), {method: 'POST', body: JSON.stringify(data)});
-    return response.status;
+  protected async post(data: JSONType): Promise<JSONType> {
+    const header: HeadersInit = {'Content-Type': 'application/json'};
+    const body: BodyInit = JSON.stringify(data);
+    const response: Response = await fetch(this.buildUrl(), {method: 'POST', headers: header, body: body});
+
+    return response.json();
   }
 
-  public abstract buildUrl(): string;
+  protected abstract buildUrl(): string;
 
-  public abstract buildObject(json: JSONType): BaseModel;
+  protected abstract buildObject(json: JSONType): BaseModel;
 }

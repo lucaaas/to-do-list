@@ -8,9 +8,6 @@ export abstract class BaseModel {
   }
 
   public toJson(): JSONType {
-    const json: JSONType = new Map();
-    json.set('id', this.id);
-
-    return json;
+    return {'id': this.id};
   }
 }

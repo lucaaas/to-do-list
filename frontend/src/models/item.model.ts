@@ -1,4 +1,3 @@
-import { j } from 'vitest/dist/index-5aad25c1';
 import type { JSONType } from '../types/JSON.type';
 import { BaseModel } from './base.model';
 
@@ -13,13 +12,13 @@ export class ItemModel extends BaseModel {
   }
 
   public static fromJson(json: JSONType): ItemModel {
-    return new this(json.get('id'), json.get('description'), json.get('done'));
+    return new this(json.description, json.done, json.id);
   }
 
   public toJson(): JSONType {
     const json: JSONType = super.toJson();
-    json.set('description', this.description);
-    json.set('done', this.done);
+    json.description = this.description;
+    json.done = this.done;
 
     return json;
   }

@@ -1,1 +1,1 @@
-export type JSONType = Map<string, any>;
+export type JSONType = {[key: string]: any};
