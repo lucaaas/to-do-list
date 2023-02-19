@@ -13,13 +13,18 @@ export abstract class ApiHelper {
     const json: Array<JSONType> = await response.json();
 
     const models: Array<BaseModel> = [];
-    for(let data of json) {
+    for (let data of json) {
       models.push(this.buildObject(data));
     }
 
     return models;
   }
 
+  /**
+   * Sends a POST request to the server with the provided data.
+   * @param data The data to send in the request body.
+   * @returns A Promise that resolves with the JSON response from the server.
+   */
   protected async post(data: JSONType): Promise<JSONType> {
     const header: HeadersInit = {'Content-Type': 'application/json'};
     const body: BodyInit = JSON.stringify(data);

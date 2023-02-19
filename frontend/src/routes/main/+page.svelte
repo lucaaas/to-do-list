@@ -13,7 +13,6 @@
 
     onMount(async () => {
       items = await controller.getItems();
-      console.log(items);
     });
 
     /**
@@ -30,6 +29,9 @@
       }
     }
 
+    /**
+     * Resets the new item field with a empty value.
+     */
     function resetNewField() {
       newItem = '';
     }
@@ -46,10 +48,8 @@
       </TextFieldComponent>
     {/each}
 
-    <TextFieldComponent label="Novo item" onKeyEnter={addItem} bind:value={newItem}>
+    <TextFieldComponent bind:value={newItem} label="Novo item" onKeyEnter={addItem}>
       <Icon class="material-icons" slot="leading"> add </Icon>
     </TextFieldComponent>
   </span>
 </CardComponent>
-
-{items}
