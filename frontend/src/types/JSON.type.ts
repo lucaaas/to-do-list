@@ -1,0 +1,1 @@
+export type JSONType = {[key: string]: any};
