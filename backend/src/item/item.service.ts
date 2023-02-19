@@ -12,19 +12,12 @@ export class ItemService {
               private dataSource: DataSource,) {
   }
   public async create(createItemDto: CreateItemDto) {
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+    const item: Item = new Item();
+    item.id = createItemDto.id;
+    item.description = createItemDto.description;
+    item.done = createItemDto.done;
 
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      await queryRunner.manager.save(createItemDto);
-      await queryRunner.commitTransaction();
-    } catch (e) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
-    }
+    return await this.itemRepository.save(item);
   }
 
   public async findAll(): Promise<Array<Item>> {
