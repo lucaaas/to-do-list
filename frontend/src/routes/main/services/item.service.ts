@@ -2,14 +2,19 @@ import { ApiHelper } from '../../../helpers/api.helper';
 import { ItemModel } from '../../../models/item.model';
 import type { JSONType } from '../../../types/JSON.type';
 
-class ItemService extends ApiHelper {
+export class ItemService extends ApiHelper {
   private readonly path: string = 'item';
 
-  public buildObject(json: JSONType): ItemModel {
+  public async save(item: ItemModel): Promise<number> {
+    const response: JSONType = await this.post(item.toJson());
+    return response.id;
+  }
+
+  protected buildObject(json: JSONType): ItemModel {
     return ItemModel.fromJson(json);
   }
 
-  public buildUrl(): string {
+  protected buildUrl(): string {
     return `${this.url}/${this.path}`;
   }
 }

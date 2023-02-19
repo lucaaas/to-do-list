@@ -1,19 +1,30 @@
 <script lang="ts">
     import Icon from '@smui/textfield/icon';
+    import { onMount } from 'svelte';
     import CardComponent from '../../lib/cardComponent/CardComponent.svelte';
     import TextFieldComponent from '../../lib/textField/TextFieldComponent.svelte';
+    import { ItemModel } from '../../models/item.model';
+    import { ItemController } from './item.controller';
 
-    let items: Array<string> = [];
+    let controller: ItemController = new ItemController();
+
+    let items: Array<ItemModel> = [];
     let newItem: string = '';
+
+    onMount(async () => {
+      items = await controller.getItems();
+      console.log(items);
+    });
 
     /**
      * Adds an item to the items list
-     * @param item item to be added
+     * @param description item's description to be added
      */
-    function addItem(item: string): void {
-      if (item !== '') {
+    async function addItem(description: string): Promise<void> {
+      if (description !== '') {
         resetNewField();
 
+        const item: ItemModel = await controller.save(description);
         items.push(item);
         items = items;
       }
@@ -30,7 +41,7 @@
   <span slot="title"> Lista TO-DO </span>
   <span slot="content">
     {#each items as item, index }
-      <TextFieldComponent label="" value={item}>
+      <TextFieldComponent label="" value={item.description}>
         <Icon class="material-icons" slot="leading"> add </Icon>
       </TextFieldComponent>
     {/each}
