@@ -2,6 +2,7 @@
     import Icon from '@smui/textfield/icon';
     import { onMount } from 'svelte';
     import CardComponent from '../../lib/cardComponent/CardComponent.svelte';
+    import CheckboxComponent from '../../lib/checkbox/CheckboxComponent.svelte';
     import TextFieldComponent from '../../lib/textField/TextFieldComponent.svelte';
     import { ItemModel } from '../../models/item.model';
     import { ItemController } from './item.controller';
@@ -35,6 +36,17 @@
     function resetNewField() {
       newItem = '';
     }
+
+    /**
+     * Updates the conclusion of an item.
+     *
+     * @param item Item to be updated.
+     * @param value The value of item conclusion
+     */
+    function updateItem(item: ItemModel, value: boolean) {
+      item.done = value;
+      controller.updateItem(item);
+    }
 </script>
 
 <h1> Hello world </h1>
@@ -44,7 +56,7 @@
   <span slot="content">
     {#each items as item, index }
       <TextFieldComponent label="" value={item.description}>
-        <Icon class="material-icons" slot="leading"> add </Icon>
+        <CheckboxComponent slot="leading" checked={item.done} onToggle={(value) => updateItem(item, value)} />
       </TextFieldComponent>
     {/each}
 

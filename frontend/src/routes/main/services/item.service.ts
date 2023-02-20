@@ -22,6 +22,17 @@ export class ItemService extends ApiHelper {
   }
 
   /**
+   * Updates an item to the API.
+   *
+   * @param item The item to be updated;
+   * @return A promise that resolves with the amount of affected rows.
+   */
+  public async update(item: ItemModel): Promise<number> {
+    const response: JSONType = this.patch(item.id!, item.toJson());
+    return response.rowsAffected;
+  }
+
+  /**
    * Builds an `ItemModel` instance from a JSON response.
    *
    * @param json - The JSON to be converted.
@@ -41,7 +52,13 @@ export class ItemService extends ApiHelper {
    *
    * @protected
    */
-  protected buildUrl(): string {
-    return `${this.url}/${this.path}`;
+  protected buildUrl(id?: number): string {
+    let url: string = `${this.url}/${this.path}`;
+
+    if(id !== undefined) {
+      url += `/${id}`;
+    }
+
+    return url;
   }
 }

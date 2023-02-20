@@ -27,4 +27,13 @@ export class ItemController {
 
     return item;
   }
+
+  /**
+   * Updates the given item on server.
+   *
+   * @param item The item to be updated.
+   */
+  public async updateItem(item: ItemModel): Promise<void> {
+    await this.itemService.update(item);
+  }
 }
