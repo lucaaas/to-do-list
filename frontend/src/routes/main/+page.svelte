@@ -65,21 +65,12 @@
         items = items;
       }
     }
-
-    /**
-     * Returns a boolean that indicates whether the item is completed or not.
-     *
-     * @param item Item to be checked.
-     */
-    function isItemCompleted(item: ItemModel) {
-      return items.completedItems.includes(item);
-    }
 </script>
 
 <CardComponent>
   <span slot="title"> Lista TO-DO </span>
   <span slot="content">
-    <ItemListComponent items={items.completedItems} />
+    <ItemListComponent items={items.uncompletedItems} onToggle={updateItem} />
 
     <TextFieldComponent bind:value={newItem} label="Novo item" onKeyEnter={addItem}>
       <Icon class="material-icons" slot="leading"> add </Icon>
@@ -87,8 +78,10 @@
 
     <hr />
 
-
-    <ItemListComponent slot="content" items={items.completedItems} />
-
+    {#if items.completedItems.length > 0}
+      <AccordionComponent title="{items.completedItems.length} itens concluídos">
+        <ItemListComponent slot="content" items={items.completedItems} onToggle={updateItem} />
+      </AccordionComponent>
+    {/if}
   </span>
 </CardComponent>
