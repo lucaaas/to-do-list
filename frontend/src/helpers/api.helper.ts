@@ -20,6 +20,14 @@ export abstract class ApiHelper {
     return models;
   }
 
+  public async patch(id: number, data: JSONType): Promise<number> {
+    const header: HeadersInit = {'Content-Type': 'application/json'};
+    const body: BodyInit = JSON.stringify(data);
+    const response: Response = await fetch(this.buildUrl(id), {method: 'PATCH', headers: header, body: body});
+
+    return response.json();
+  }
+
   /**
    * Sends a POST request to the server with the provided data.
    * @param data The data to send in the request body.
@@ -33,7 +41,7 @@ export abstract class ApiHelper {
     return response.json();
   }
 
-  protected abstract buildUrl(): string;
+  protected abstract buildUrl(id?: number): string;
 
   protected abstract buildObject(json: JSONType): BaseModel;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryRunner, Repository } from 'typeorm';
+import { DataSource, QueryRunner, Repository, UpdateResult } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
@@ -56,8 +56,9 @@ export class ItemService {
    * @param updateItemDto The updated data for the item.
    * @returns The updated item.
    */
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
+  public async update(id: number, updateItemDto: UpdateItemDto): Promise<number> {
+    const result: UpdateResult = await this.itemRepository.update(id, updateItemDto);
+    return result.affected;
   }
 
   /**
