@@ -1,10 +1,12 @@
 <script lang="ts">
     import Icon from '@smui/textfield/icon';
     import { onMount } from 'svelte';
+    import AccordionComponent from '../../lib/accordion/AccordionComponent.svelte';
     import CardComponent from '../../lib/cardComponent/CardComponent.svelte';
     import CheckboxComponent from '../../lib/checkbox/CheckboxComponent.svelte';
     import TextFieldComponent from '../../lib/textField/TextFieldComponent.svelte';
     import { ItemModel } from '../../models/item.model';
+    import ItemListComponent from './components/itemList/ItemListComponent.svelte';
     import { ItemController } from './item.controller';
 
     let controller: ItemController = new ItemController();
@@ -77,20 +79,16 @@
 <CardComponent>
   <span slot="title"> Lista TO-DO </span>
   <span slot="content">
-    {#each items.uncompletedItems as item, index}
-      <TextFieldComponent label="" value={item.description} onKeyEnter={() => {}}>
-        <CheckboxComponent slot="leading" checked={item.done} onToggle={(value) => updateItem(item, value)} />
-      </TextFieldComponent>
-    {/each}
+    <ItemListComponent items={items.completedItems} />
 
     <TextFieldComponent bind:value={newItem} label="Novo item" onKeyEnter={addItem}>
       <Icon class="material-icons" slot="leading"> add </Icon>
     </TextFieldComponent>
 
-    {#each items.completedItems as item, index}
-      <TextFieldComponent label="" value={item.description} onKeyEnter={() => {}}>
-        <CheckboxComponent slot="leading" checked={isItemCompleted(item)} onToggle={(value) => updateItem(item, value)} />
-      </TextFieldComponent>
-    {/each}
+    <hr />
+
+
+    <ItemListComponent slot="content" items={items.completedItems} />
+
   </span>
 </CardComponent>
