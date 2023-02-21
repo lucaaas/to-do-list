@@ -9,8 +9,11 @@
 
     let controller: ItemController = new ItemController();
 
-    let items: Array<ItemModel> = [];
     let newItem: string = '';
+    let items: { completedItems: Array<ItemModel>; uncompletedItems: Array<ItemModel> } = {
+      completedItems: [],
+      uncompletedItems: []
+    };
 
     onMount(async () => {
       items = await controller.getItems();
@@ -25,7 +28,7 @@
         resetNewField();
 
         const item: ItemModel = await controller.save(description);
-        items.push(item);
+        items.uncompletedItems.push(item);
         items = items;
       }
     }
@@ -41,21 +44,41 @@
      * Updates the conclusion of an item.
      *
      * @param item Item to be updated.
-     * @param value The value of item conclusion
+     * @param checked The value of item conclusion
      */
-    function updateItem(item: ItemModel, value: boolean) {
-      item.done = value;
-      controller.updateItem(item);
+    async function updateItem(item: ItemModel, checked: boolean) {
+      if (item.done !== checked) {
+        item.done = checked;
+        await controller.updateItem(item);
+
+        if (checked) {
+          const index: number = items.uncompletedItems.lastIndexOf(item);
+          items.uncompletedItems.splice(index, 1);
+          items.completedItems.push(item);
+        } else {
+          const index: number = items.completedItems.lastIndexOf(item);
+          items.completedItems.splice(index, 1);
+          items.uncompletedItems.push(item);
+        }
+        items = items;
+      }
+    }
+
+    /**
+     * Returns a boolean that indicates whether the item is completed or not.
+     *
+     * @param item Item to be checked.
+     */
+    function isItemCompleted(item: ItemModel) {
+      return items.completedItems.includes(item);
     }
 </script>
-
-<h1> Hello world </h1>
 
 <CardComponent>
   <span slot="title"> Lista TO-DO </span>
   <span slot="content">
-    {#each items as item, index }
-      <TextFieldComponent label="" value={item.description}>
+    {#each items.uncompletedItems as item, index}
+      <TextFieldComponent label="" value={item.description} onKeyEnter={() => {}}>
         <CheckboxComponent slot="leading" checked={item.done} onToggle={(value) => updateItem(item, value)} />
       </TextFieldComponent>
     {/each}
@@ -63,5 +86,11 @@
     <TextFieldComponent bind:value={newItem} label="Novo item" onKeyEnter={addItem}>
       <Icon class="material-icons" slot="leading"> add </Icon>
     </TextFieldComponent>
+
+    {#each items.completedItems as item, index}
+      <TextFieldComponent label="" value={item.description} onKeyEnter={() => {}}>
+        <CheckboxComponent slot="leading" checked={isItemCompleted(item)} onToggle={(value) => updateItem(item, value)} />
+      </TextFieldComponent>
+    {/each}
   </span>
 </CardComponent>

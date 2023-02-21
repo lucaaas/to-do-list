@@ -8,10 +8,22 @@ export class ItemController {
   private itemService: ItemService = new ItemService();
 
   /**
-   * Returns a promise that resolves to an array of all items.
+   * Returns a promise that resolves to an array of completed items and another of uncompleted items.
    */
-  public async getItems(): Promise<Array<ItemModel>> {
-    return await this.itemService.getAll() as Array<ItemModel>;
+  public async getItems(): Promise<{ completedItems: Array<ItemModel>; uncompletedItems: Array<ItemModel> }> {
+    const items: Array<ItemModel> = await this.itemService.getAll() as Array<ItemModel>;
+    const completedItems: Array<ItemModel> = [];
+    const uncompletedItems: Array<ItemModel> = [];
+
+    for (let item of items) {
+      if (item.done) {
+        completedItems.push(item);
+      } else {
+        uncompletedItems.push(item);
+      }
+    }
+
+    return {completedItems, uncompletedItems};
   }
 
   /**
