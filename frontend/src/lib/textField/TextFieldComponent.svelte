@@ -3,7 +3,8 @@
 
   @prop label - The label text for the textfield.
   @prop value - The current value of the textfield. Defaults to ''.
-  @prop {function} [onKeyEnter] - The callback function to execute when the "Enter" key is pressed.
+  @prop onKeyEnter - The callback function to execute when the "Enter" key is pressed.
+  @prop onFocusOut - The callback function to execute when the field lost focus.
 
   @slot leading - The icon shown at the start of the textfield.
   @slot trailing - The icon show at the end of the textfield.
@@ -14,6 +15,7 @@
   export let label: string = '';
   export let value: string = '';
   export let onKeyEnter: (value: string) => void;
+  export let onFocusOut: (value: string) => void;
 
   let input: HTMLInputElement;
   function inputHandler (event: KeyboardEvent) {
@@ -24,6 +26,11 @@
       value = newValue;
     }
   }
+  
+  function didLeaveInput(event: FocusEvent) {
+    const newValue = (event.target as HTMLInputElement).value;
+    onFocusOut(newValue);
+  }
 </script>
 
 <TextField label={label}
@@ -32,6 +39,7 @@
            style="width: 100%"
            bind:value
            on:keypress={inputHandler}
+           on:focusout={didLeaveInput}
            bind:this={input} >
   <slot name="leading" slot="leadingIcon" />
   <slot name="trailing" slot="trailingIcon" />

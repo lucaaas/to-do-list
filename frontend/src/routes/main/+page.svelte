@@ -3,7 +3,6 @@
     import { onMount } from 'svelte';
     import AccordionComponent from '../../lib/accordion/AccordionComponent.svelte';
     import CardComponent from '../../lib/cardComponent/CardComponent.svelte';
-    import CheckboxComponent from '../../lib/checkbox/CheckboxComponent.svelte';
     import TextFieldComponent from '../../lib/textField/TextFieldComponent.svelte';
     import { ItemModel } from '../../models/item.model';
     import ItemListComponent from './components/itemList/ItemListComponent.svelte';
@@ -36,7 +35,7 @@
     }
 
     /**
-     * Resets the new item field with a empty value.
+     * Resets the new item field with an empty value.
      */
     function resetNewField() {
       newItem = '';
@@ -48,7 +47,7 @@
      * @param item Item to be updated.
      * @param checked The value of item conclusion
      */
-    async function updateItem(item: ItemModel, checked: boolean) {
+    async function toggleDone(item: ItemModel, checked: boolean) {
       if (item.done !== checked) {
         item.done = checked;
         await controller.updateItem(item);
@@ -65,12 +64,23 @@
         items = items;
       }
     }
+
+    /**
+     * Updates an item with a new description.
+     *
+     * @param item Item to be updated.
+     * @param newDescription new description to be saved.
+     */
+    async function updateItem(item: ItemModel, newDescription: string) {
+      item.description = newDescription;
+      await controller.updateItem(item);
+    }
 </script>
 
 <CardComponent>
   <span slot="title"> Lista TO-DO </span>
   <span slot="content">
-    <ItemListComponent items={items.uncompletedItems} onToggle={updateItem} />
+    <ItemListComponent items={items.uncompletedItems} onToggle={toggleDone} onEditItem={updateItem} />
 
     <TextFieldComponent bind:value={newItem} label="Novo item" onKeyEnter={addItem}>
       <Icon class="material-icons" slot="leading"> add </Icon>
@@ -80,7 +90,7 @@
 
     {#if items.completedItems.length > 0}
       <AccordionComponent title="{items.completedItems.length} itens concluídos">
-        <ItemListComponent slot="content" items={items.completedItems} onToggle={updateItem} />
+        <ItemListComponent slot="content" items={items.completedItems} onToggle={toggleDone} onEditItem={updateItem} />
       </AccordionComponent>
     {/if}
   </span>
