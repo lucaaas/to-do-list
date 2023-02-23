@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryRunner, Repository, UpdateResult } from 'typeorm';
+import { DataSource, DeleteResult, QueryRunner, Repository, UpdateResult } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
@@ -67,7 +67,7 @@ export class ItemService {
    * @param id The ID of the item to delete.
    * @returns The deleted item.
    */
-  remove(id: number) {
-    return `This action removes a #${id} item`;
+  public remove(id: number): Promise<DeleteResult> {
+    return this.itemRepository.delete({id: id});
   }
 }

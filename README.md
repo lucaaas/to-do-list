@@ -4,9 +4,9 @@ Esta é uma simples aplicação para a criação de uma lista de afazeres constr
 com Svelte, NestJS e Postgres.
 
 Antes de iniciar o desenvolvimento da aplicação, os requisitos foram documentos
-em forma de issues utilizando [Histórias de usuário](extremeprogramming.org/rules/userstories.html).
+em forma de issues utilizando [Histórias de usuário](http://extremeprogramming.org/rules/userstories.html).
 
-Todas as histórias levantadas podem ser encontradas aqui [aqui](https://github.com/lucaaas/to-do-list/issues?q=is%3Aissue+label%3Aenhancement+).
+Todas as histórias levantadas podem ser encontradas [aqui](https://github.com/lucaaas/to-do-list/issues?q=is%3Aissue+label%3Aenhancement+).
 As concluídas podem ser encontradas [aqui](https://github.com/lucaaas/to-do-list/issues?q=is%3Aissue+label%3Aenhancement+is%3Aclosed).
 E, finalmente, os _bugs_ conhecidos foram listados [aqui](https://github.com/lucaaas/to-do-list/issues?q=is%3Aissue+label%3Abug).
 
