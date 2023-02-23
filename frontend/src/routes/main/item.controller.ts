@@ -48,4 +48,13 @@ export class ItemController {
   public async updateItem(item: ItemModel): Promise<void> {
     await this.itemService.update(item);
   }
+
+  /**
+   * Deletes the given item.
+   *
+   * @param item The item to be deleted.
+   */
+  public async deleteItem(item: ItemModel): Promise<void> {
+    await this.itemService.delete(item.id!);
+  }
 }

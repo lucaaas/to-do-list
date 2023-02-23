@@ -20,6 +20,13 @@
       items = await controller.getItems();
     });
 
+    async function deleteItem(item: ItemModel): Promise<void> {
+      await controller.deleteItem(item);
+      removeItemFromList(item);
+
+      items = items;
+    }
+
     /**
      * Adds an item to the items list
      * @param description item's description to be added
@@ -49,18 +56,16 @@
      */
     async function toggleDone(item: ItemModel, checked: boolean) {
       if (item.done !== checked) {
-        item.done = checked;
-        await controller.updateItem(item);
+        removeItemFromList(item);
 
         if (checked) {
-          const index: number = items.uncompletedItems.lastIndexOf(item);
-          items.uncompletedItems.splice(index, 1);
           items.completedItems.push(item);
         } else {
-          const index: number = items.completedItems.lastIndexOf(item);
-          items.completedItems.splice(index, 1);
           items.uncompletedItems.push(item);
         }
+
+        item.done = checked;
+        await controller.updateItem(item);
         items = items;
       }
     }
@@ -75,12 +80,26 @@
       item.description = newDescription;
       await controller.updateItem(item);
     }
+
+    function removeItemFromList(item: ItemModel): void {
+      if (item.done) {
+        const index: number = items.completedItems.lastIndexOf(item);
+        items.completedItems.splice(index, 1);
+      } else {
+        const index: number = items.uncompletedItems.lastIndexOf(item);
+        items.uncompletedItems.splice(index, 1);
+      }
+    }
 </script>
 
 <CardComponent>
   <span slot="title"> Lista TO-DO </span>
   <span slot="content">
-    <ItemListComponent items={items.uncompletedItems} onToggle={toggleDone} onEditItem={updateItem} />
+    <ItemListComponent items={items.uncompletedItems}
+                       onToggle={toggleDone}
+                       onEditItem={updateItem}
+                       onDeleteItem={deleteItem}
+    />
 
     <TextFieldComponent bind:value={newItem} label="Novo item" onKeyEnter={addItem}>
       <Icon class="material-icons" slot="leading"> add </Icon>
@@ -90,7 +109,12 @@
 
     {#if items.completedItems.length > 0}
       <AccordionComponent title="{items.completedItems.length} itens concluídos">
-        <ItemListComponent slot="content" items={items.completedItems} onToggle={toggleDone} onEditItem={updateItem} />
+        <ItemListComponent slot="content"
+                           items={items.completedItems}
+                           onToggle={toggleDone}
+                           onEditItem={updateItem}
+                           onDeleteItem={deleteItem}
+        />
       </AccordionComponent>
     {/if}
   </span>
