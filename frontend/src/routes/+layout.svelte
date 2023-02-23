@@ -1,6 +1,14 @@
 <script>
 	import Header from './Header.svelte';
 	import './styles.scss';
+	import {onMount} from "svelte";
+	import {goto} from "$app/navigation";
+
+	onMount(() => {
+		if (location.pathname === '/') {
+			goto('/main');
+		}
+	});
 </script>
 
 <div class="app">
@@ -9,10 +17,6 @@
 	<main>
 		<slot />
 	</main>
-
-	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-	</footer>
 </div>
 
 <style>
