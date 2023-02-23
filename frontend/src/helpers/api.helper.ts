@@ -4,6 +4,10 @@ import type { JSONType } from '../types/JSON.type';
 export abstract class ApiHelper {
   protected readonly url: string = 'http://127.0.0.1:3000';
 
+  public async delete(id: number): Promise<JSONType> {
+    return await this.sendRequest(this.buildUrl(id), 'DELETE');
+  }
+
   /**
    * Get all resources of the specified path
    * @param path
@@ -21,11 +25,8 @@ export abstract class ApiHelper {
   }
 
   public async patch(id: number, data: JSONType): Promise<number> {
-    const header: HeadersInit = {'Content-Type': 'application/json'};
-    const body: BodyInit = JSON.stringify(data);
-    const response: Response = await fetch(this.buildUrl(id), {method: 'PATCH', headers: header, body: body});
-
-    return response.json();
+    const response = await this.sendRequest(this.buildUrl(id), 'PATCH', JSON.stringify(data));
+    return response['id'];
   }
 
   /**
@@ -34,9 +35,12 @@ export abstract class ApiHelper {
    * @returns A Promise that resolves with the JSON response from the server.
    */
   protected async post(data: JSONType): Promise<JSONType> {
+    return await this.sendRequest(this.buildUrl(), 'POST', JSON.stringify(data));
+  }
+
+  private async sendRequest(url: string, method: string, data?: string): Promise<JSONType> {
     const header: HeadersInit = {'Content-Type': 'application/json'};
-    const body: BodyInit = JSON.stringify(data);
-    const response: Response = await fetch(this.buildUrl(), {method: 'POST', headers: header, body: body});
+    const response: Response = await fetch(url, {method: method, headers: header, body: data});
 
     return response.json();
   }

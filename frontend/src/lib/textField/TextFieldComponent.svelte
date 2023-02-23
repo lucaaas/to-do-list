@@ -26,10 +26,13 @@
       value = newValue;
     }
   }
-  
+
   function didLeaveInput(event: FocusEvent) {
-    const newValue = (event.target as HTMLInputElement).value;
-    onFocusOut(newValue);
+    const target: HTMLInputElement = event.target as HTMLInputElement;
+    if (target.type === 'text') {
+      const newValue = (event.target as HTMLInputElement).value;
+      onFocusOut(newValue);
+    }
   }
 </script>
 
